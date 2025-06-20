@@ -35,8 +35,9 @@ from qiskit_aer.noise import NoiseModel
 # Removed: from .my_job_monitor import my_job_monitor as job_monitor
 # Removed: from qiskit.providers.ibmq import IBMQ
 from qiskit_ibm_runtime import QiskitRuntimeService # Changed provider to runtime
-from qiskit_aer.primitives import SamplerV2 as AerSamplerV2 # Added
-from qiskit_ibm_runtime import SamplerV2 as RuntimeSamplerV2 # Changed provider to runtime
+# from qiskit_aer.primitives import SamplerV2 as AerSamplerV2 # Added
+from qiskit_aer.primitives import Sampler as AerSampler
+from qiskit_ibm_runtime import SamplerV2 as RuntimeSampler # Changed provider to runtime
 from qiskit.primitives.containers import PubResult # Added
 from qiskit.exceptions import QiskitError
 from .qiskit_plugin import (
@@ -183,8 +184,8 @@ class QiskitProcessor(object):
             try:
                 self.service = QiskitRuntimeService(token=self.ibm_quantum_token, channel='ibm_quantum')
                 self.backend = self.service.backend(self.backend_name)
-                self.sampler = RuntimeSamplerV2(mode=self.backend)
-                logger.info(f"Initialized QiskitRuntimeService and RuntimeSamplerV2 for backend: {self.backend_name}")
+                self.sampler = RuntimeSampler(mode=self.backend)
+                logger.info(f"Initialized QiskitRuntimeService and RuntimeSampler for backend: {self.backend_name}")
             except Exception as e:
                 logger.error(f"Failed to initialize QiskitRuntimeService or get backend: {e}")
                 raise
@@ -223,8 +224,8 @@ class QiskitProcessor(object):
             # Configure backend options for the sampler
             backend_opts = {"noise_model": self.noise_model} if self.noise_model else {}
             # Initialize Sampler with options
-            self.sampler = AerSamplerV2(options={"backend_options": backend_opts}, seed=self.seed_simulator)
-            logger.info(f"Initialized AerSamplerV2.{' With noise model.' if self.noise_model else ''}")
+            self.sampler = AerSampler(options={"backend_options": backend_opts}, seed=self.seed_simulator)
+            logger.info(f"Initialized AerSampler.{' With noise model.' if self.noise_model else ''}")
 
     def set_layout(self, layout):
         self.initial_layout = layout
@@ -278,7 +279,7 @@ class QiskitProcessor(object):
 
         # Prepare run options
         run_options = {"shots": self.n_shots}
-        if isinstance(self.sampler, AerSamplerV2):
+        if isinstance(self.sampler, AerSampler):
             # Pass seed to constructor, not run options
             # run_options["seed"] = self.seed_simulator # Incorrect - seed is for constructor
             pass # Seed already set in constructor

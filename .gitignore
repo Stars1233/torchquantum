@@ -345,3 +345,6 @@ max-acc-valid.pt
 model.pt
 .cursor/rules/*.mdc
 
+.cursorignore
+.cursor/
+.github/copilot-instructions.md
