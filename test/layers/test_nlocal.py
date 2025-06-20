@@ -49,7 +49,7 @@ def compare_tq_to_qiskit(tq_circuit, qiskit_circuit, instance_info=""):
     ), f"operations do not match for {instance_info}"
 
 
-## TEST TWOLOCAL
+# TEST TWOLOCAL
 
 
 def test_twolocal():
@@ -83,7 +83,7 @@ def test_twolocal():
                 compare_tq_to_qiskit(qdev, qiskit_two)
 
 
-## TEST OTHER CIRCUITS
+# TEST OTHER CIRCUITS
 
 
 def test_twolocal_variants():

@@ -27,9 +27,6 @@ import torch.nn.functional as F
 
 import torchquantum as tq
 
-import random
-import numpy as np
-
 
 class QLayer(tq.QuantumModule):
     def __init__(self):
@@ -152,9 +149,9 @@ def save_load3():
 
 
 if __name__ == "__main__":
-    print(f"case 1: save and load the state_dict")
+    print("case 1: save and load the state_dict")
     save_load1()
-    print(f"case 2: save and load the entire model")
+    print("case 2: save and load the entire model")
     save_load2()
-    print(f"case 3: save and load the entire model with torch.jit.script")
+    print("case 3: save and load the entire model with torch.jit.script")
     save_load3()

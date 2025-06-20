@@ -114,9 +114,9 @@ def train_tq(model, device, train_dl, epochs, loss_fn, optimizer):
             running_loss += loss.item()
             batches += 1
 
-            print(f"Epoch {epoch + 1} | Loss: {running_loss/batches}", end="\r")
+            print(f"Epoch {epoch + 1} | Loss: {running_loss / batches}", end="\r")
 
-        print(f"Epoch {epoch + 1} | Loss: {running_loss/batches}")
+        print(f"Epoch {epoch + 1} | Loss: {running_loss / batches}")
         losses.append(running_loss / batches)
 
     return losses

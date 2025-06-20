@@ -25,20 +25,6 @@ SOFTWARE.
 __version__ = "0.2.0"
 __author__ = "TorchQuantum Authors"
 
-from .macro import *
-from .device import *
-from .module import *
-from .operator import *
-from .measurement import *
-from .functional import *
-from .graph import *
-from .layer import *
-from .encoding import *
-from .util import *
-from .noise_model import *
-from .algorithm import *
-from .dataset import *
-from .pulse import *
 
 # here we check whether the Qiskit parameterization bug is fixed, if not, a
 # warning message will be printed
@@ -47,8 +33,8 @@ import os
 
 path = os.path.abspath(qiskit.__file__)
 # print(path)
-# path for aer provider
-path_provider = path.replace("__init__.py", "providers/aer/backends/aerbackend.py")
+# path for are provider
+path_provider = path.replace("__init__.py", "providers/are/backends/aerbackend.py")
 # print(path_provider)
 
 # with open(path_provider, 'r') as fid:

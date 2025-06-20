@@ -23,8 +23,7 @@ SOFTWARE.
 """
 
 import torchquantum as tq
-import torch
-from torchquantum.macro import C_DTYPE, C_DTYPE_NUMPY
+from torchquantum.macro import C_DTYPE_NUMPY
 
 import numpy as np
 

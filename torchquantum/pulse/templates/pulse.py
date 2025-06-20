@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from typing import Union, List, Iterable
+from typing import List
 
 
 __all__ = [
@@ -19,7 +19,6 @@ class QuantumPulse(nn.Module):
 
     def __init__(self):
         super().__init__()
-        pass
 
     def forward(self):
         pass
@@ -131,7 +130,7 @@ class QuantumPulseGaussian(QuantumPulse):
         return u_overall
 
     def __repr__(self):
-        return f"QuantumPulse Guassian \n shape: {self.pulse_shape}"
+        return f"QuantumPulse Gaussian \n shape: {self.pulse_shape}"
 
 
 if __name__ == "__main__":

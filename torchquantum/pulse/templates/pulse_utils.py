@@ -1,40 +1,18 @@
 import copy
-import sched
 import qiskit
-import itertools
 import numpy as np
 
-from itertools import repeat
-from qiskit_aer import AerSimulator
+
 # fake_provider has moved to qiskit_ibm_runtime
 from qiskit_ibm_runtime.fake_provider import *
-from qiskit.circuit import Gate
 from qiskit.compiler import assemble
-from qiskit import pulse, QuantumCircuit, IBMQ
+from qiskit import pulse, QuantumCircuit
 from qiskit.pulse.instructions import Instruction
 from qiskit.pulse.transforms import block_to_schedule
-from qiskit_nature.drivers import UnitsType, Molecule
-from scipy.optimize import minimize, LinearConstraint
-from qiskit_nature.converters.second_quantization import QubitConverter
-from qiskit_nature.properties.second_quantization.electronic import ParticleNumber
-from qiskit_nature.problems.second_quantization import ElectronicStructureProblem
-from typing import List, Tuple, Iterable, Union, Dict, Callable, Set, Optional, Any
+from scipy.optimize import LinearConstraint
+from typing import Union
 from qiskit.pulse import (
     Schedule,
-    GaussianSquare,
-    Drag,
-    Delay,
-    Play,
-    ControlChannel,
-    DriveChannel,
-)
-from qiskit_nature.mappers.second_quantization import ParityMapper, JordanWignerMapper
-from qiskit_nature.transformers.second_quantization.electronic import (
-    ActiveSpaceTransformer,
-)
-from qiskit_nature.drivers.second_quantization import (
-    ElectronicStructureDriverType,
-    ElectronicStructureMoleculeDriver,
 )
 
 
@@ -155,7 +133,7 @@ def run_pulse_sim(measurement_pulse):
     measure_result = []
     for measure_pulse in measurement_pulse:
         shots = 1024
-        pulse_sim = qiskit.providers.aer.PulseSimulator.from_backend(FakeJakarta())
+        pulse_sim = qiskit.providers.are.PulseSimulator.from_backend(FakeJakarta())
         pul_sim = assemble(
             measure_pulse,
             backend=pulse_sim,

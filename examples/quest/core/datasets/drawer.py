@@ -23,7 +23,6 @@ SOFTWARE.
 """
 
 import matplotlib.pyplot as plt
-from matplotlib import rc
 from torchpack.utils.config import configs
 
 

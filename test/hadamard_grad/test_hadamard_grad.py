@@ -3,6 +3,7 @@ from examples.hadamard_grad.circ import Circ1, Circ2, Circ3
 from examples.hadamard_grad.hadamard_grad import hadamard_grad
 import pytest
 
+
 @pytest.mark.skip
 def test_hadamard_grad():
     """
@@ -22,7 +23,7 @@ def test_hadamard_grad():
         observable = "ZZZZ"
         hadamard_grad_result = hadamard_grad(op_history, n_wires, observable)
         hadamard_grad_result = [
-            gradient for gradient in hadamard_grad_result if gradient != None
+            gradient for gradient in hadamard_grad_result if gradient is not None
         ]
 
         # backpropagation

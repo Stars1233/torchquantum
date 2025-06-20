@@ -23,7 +23,6 @@ SOFTWARE.
 """
 
 import torch
-from .gate_wrapper import gate_wrapper
 from typing import Union
 import numpy as np
 import torchquantum.functional as tqf

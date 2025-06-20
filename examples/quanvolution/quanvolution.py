@@ -23,7 +23,6 @@ SOFTWARE.
 """
 
 import torchquantum as tq
-import torchquantum.functional as tqf
 
 import torch
 import torch.nn.functional as F
@@ -156,9 +155,11 @@ def main():
         "--epochs", type=int, default=15, help="number of training epochs"
     )
     parser.add_argument(
-        "--qiskit-simulation", action="store_true", help="run the program on a real quantum computer"
+        "--qiskit-simulation",
+        action="store_true",
+        help="run the program on a real quantum computer",
     )
-    args = parser.parse_args() 
+    args = parser.parse_args()
 
     train_model_without_qf = True
     n_epochs = args.epochs
@@ -197,7 +198,7 @@ def main():
     loss_list2 = []
     for epoch in range(1, n_epochs + 1):
         # train
-        print(f"Epoch {epoch}:")
+        print(f"Epoch {epoch}: ")
         train(dataflow, model, device, optimizer)
         print(optimizer.param_groups[0]["lr"])
 
@@ -219,7 +220,7 @@ def main():
         scheduler = CosineAnnealingLR(optimizer, T_max=n_epochs)
         for epoch in range(1, n_epochs + 1):
             # train
-            print(f"Epoch {epoch}:")
+            print(f"Epoch {epoch}: ")
             train(dataflow, model_without_qf, device, optimizer)
             print(optimizer.param_groups[0]["lr"])
 
@@ -233,18 +234,19 @@ def main():
     if args.qiskit_simulation:
         # run on real QC
         try:
-            from qiskit import IBMQ
             from torchquantum.plugin import QiskitProcessor
 
             # firstly perform simulate
-            print(f"\nTest with Qiskit Simulator")
+            print("\nTest with Qiskit Simulator")
             processor_simulation = QiskitProcessor(use_real_qc=False)
             model.qf.set_qiskit_processor(processor_simulation)
             valid_test(dataflow, "test", model, device, qiskit=True)
             # then try to run on REAL QC
             backend_name = "ibmq_quito"
             print(f"\nTest on Real Quantum Computer {backend_name}")
-            processor_real_qc = QiskitProcessor(use_real_qc=True, backend_name=backend_name)
+            processor_real_qc = QiskitProcessor(
+                use_real_qc=True, backend_name=backend_name
+            )
             model.qf.set_qiskit_processor(processor_real_qc)
             valid_test(dataflow, "test", model, device, qiskit=True)
         except ImportError:

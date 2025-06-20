@@ -208,7 +208,7 @@ def main():
 
     for epoch in range(1, n_epochs + 1):
         # train
-        print(f"Epoch {epoch}:")
+        print(f"Epoch {epoch}: ")
         train(dataflow, model, device, optimizer)
         print(optimizer.param_groups[0]["lr"])
 

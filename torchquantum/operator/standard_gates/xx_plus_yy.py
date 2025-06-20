@@ -1,9 +1,5 @@
-from ..op_types import Observable, Operation
+from ..op_types import Operation
 from abc import ABCMeta
-from torchquantum.macro import C_DTYPE
-import torchquantum as tq
-import torch
-from torchquantum.functional import mat_dict
 import torchquantum.functional as tqf
 
 

@@ -24,7 +24,6 @@ SOFTWARE.
 
 import torch
 import torch.nn as nn
-import numpy as np
 
 from torchquantum.macro import C_DTYPE
 from torchquantum.functional import func_name_dict, func_name_dict_collect
@@ -81,20 +80,22 @@ class NoiseDevice(nn.Module):
     def __repr__(self):
         return f" class: {self.name} \n device name: {self.device_name} \n number of qubits: {self.n_wires} \n batch size: {self.bsz} \n current computing device: {self.density.device} \n recording op history: {self.record_op} \n current states: {repr(self.get_probs_1d().cpu().detach().numpy())}"
 
-
-    '''
+    """
     Get the probability of measuring each state to a one dimension
     tensor
-    '''
+    """
+
     def get_probs_1d(self):
         """Return the states in a 1d tensor."""
         bsz = self.densities.shape[0]
-        densities2d=torch.reshape(self.densities, [bsz, 2**self.n_wires,2**self.n_wires])
+        densities2d = torch.reshape(
+            self.densities, [bsz, 2**self.n_wires, 2**self.n_wires]
+        )
         return torch.diagonal(densities2d, offset=0, dim1=1, dim2=2)
 
     def get_prob_1d(self):
         """Return the state in a 1d tensor."""
-        density2d=torch.reshape(self.density, [2**self.n_wires,2**self.n_wires])
+        density2d = torch.reshape(self.density, [2**self.n_wires, 2**self.n_wires])
         return torch.diagonal(density2d, offset=0, dim1=0, dim2=1)
 
 

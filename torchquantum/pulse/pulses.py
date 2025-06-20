@@ -26,7 +26,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from typing import Union, List, Iterable
+from typing import List
 
 
 __all__ = [
@@ -38,7 +38,7 @@ __all__ = [
 
 class QuantumPulse(nn.Module):
     """The Quantum Pulse simulator
-    
+
     Methods:
         __init__(self):
             Initialize the QuantumPulse.
@@ -47,13 +47,12 @@ class QuantumPulse(nn.Module):
 
     def __init__(self):
         """Initialize the Quantum Pulse simulator.
-        
+
         Returns:
             None.
         """
-        
+
         super().__init__()
-        pass
 
     def forward(self):
         pass
@@ -74,7 +73,7 @@ class QuantumPulseDirect(QuantumPulse):
             hamil: The Hamiltonian.
             delta_t (float, optional): The time step size.
                 Defaults to 1.0.
-            initial_shape (List[float], optional): The initial shape of the pulse. 
+            initial_shape (List[float], optional): The initial shape of the pulse.
                 Defaults to None.
 
         Raises:
@@ -84,7 +83,7 @@ class QuantumPulseDirect(QuantumPulse):
             >>> hamiltonian = ...
             >>> pulse = QuantumPulseDirect(n_steps=10, hamil=hamiltonian, delta_t=0.1)
         """
-        
+
         super().__init__()
         self.hamil = torch.tensor(hamil, dtype=torch.complex64)
         if initial_shape is not None:
@@ -106,7 +105,7 @@ class QuantumPulseDirect(QuantumPulse):
             >>> pulse = QuantumPulseDirect(n_steps=10, hamil=hamiltonian, delta_t=0.1)
             >>> unitary = pulse.get_unitary()
         """
-        
+
         unitary_per_step = []
         for k in range(self.n_steps):
             magnitude = self.pulse_shape[k]
@@ -138,7 +137,7 @@ class QuantumPulseDirect(QuantumPulse):
             QuantumPulse Direct
             shape: tensor([...])
         """
-        
+
         return f"QuantumPulse Direct \n shape: {self.pulse_shape}"
 
 
@@ -166,7 +165,7 @@ class QuantumPulseGaussian(QuantumPulse):
                 Defaults to -10.
             x_max (float, optional): The maximum value of x.
                 Defaults to 10.
-            initial_params (List[float], optional): The initial parameters of the pulse. 
+            initial_params (List[float], optional): The initial parameters of the pulse.
                 Defaults to None.
 
         Returns:
@@ -179,7 +178,7 @@ class QuantumPulseGaussian(QuantumPulse):
             >>> hamiltonian = ...
             >>> pulse = QuantumPulseGaussian(hamil=hamiltonian, n_steps=100, delta_t=0.1)
         """
-        
+
         super(QuantumPulseGaussian, self).__init__()
         self.hamil = torch.tensor(hamil, dtype=torch.complex64)
         self.delta_t = delta_t
@@ -205,7 +204,7 @@ class QuantumPulseGaussian(QuantumPulse):
             >>> pulse = QuantumPulseGaussian(hamil=hamiltonian, n_steps=100, delta_t=0.1)
             >>> unitary = pulse.get_unitary()
         """
-        
+
         self.mag = self.pulse_params[0]
         self.mu = self.pulse_params[1]
         self.sigma = self.pulse_params[2]
@@ -249,10 +248,10 @@ class QuantumPulseGaussian(QuantumPulse):
         Example:
             >>> pulse = QuantumPulseGaussian(hamil=hamiltonian, n_steps=100, delta_t=0.1)
             >>> print(pulse)
-            QuantumPulse Guassian
+            QuantumPulse Gaussian
             shape: tensor([...])
         """
-        return f"QuantumPulse Guassian \n shape: {self.pulse_shape}"
+        return f"QuantumPulse Gaussian \n shape: {self.pulse_shape}"
 
 
 if __name__ == "__main__":

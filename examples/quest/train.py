@@ -23,7 +23,6 @@ SOFTWARE.
 """
 
 import argparse
-import pdb
 import random
 import sys
 
@@ -36,10 +35,9 @@ import torch.nn
 import torch.utils.data
 from core.datasets.trainer import trainer
 from torch_geometric.loader import DataLoader
-from torchpack.environ import auto_set_run_dir, set_run_dir
+from torchpack.environ import auto_set_run_dir
 from torchpack.utils.config import configs
 from torchpack.utils.logging import logger
-from utils.load_data import load_data_and_save
 
 
 def main() -> None:

@@ -26,7 +26,6 @@ SOFTWARE.
 
 
 import torchquantum as tq
-import torchquantum.functional as tqf
 from test.utils import check_all_close
 
 # import pdb

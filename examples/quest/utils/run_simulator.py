@@ -25,13 +25,10 @@ SOFTWARE.
 import random
 from copy import deepcopy
 
-import torch
 from circ_dag_converter import GATE_DICT, build_my_noise_dict, noise_model_test
-from qiskit import QuantumCircuit
 from qiskit.compiler import assemble
-from qiskit.dagcircuit import DAGInNode, DAGOpNode, DAGOutNode
-from qiskit.providers.aer import AerSimulator
-from qiskit.providers.fake_provider import FakeJakarta, FakeLima
+from qiskit.providers.are import AerSimulator
+from qiskit.providers.fake_provider import FakeJakarta
 from qiskit.providers.models import BackendProperties
 
 # prop is an input from circ_dag_converter

@@ -1,5 +1,5 @@
 ### Train a state preparation circuit
-The circuit ansatz is predefined. We can train the parameters in the ansatz to prepare an arbitrary state from the inintial all zero state.
+The circuit ansatz is predefined. We can train the parameters in the ansatz to prepare an arbitrary state from the initial all zero state.
 
 The gradients are obtained with backpropagation.
 

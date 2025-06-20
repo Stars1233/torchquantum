@@ -1,12 +1,11 @@
 import torch
 import torch.nn as nn
 import torchquantum as tq
-import torchquantum.functional.functionals as tqf
 import numpy as np
 import logging
 from abc import ABCMeta
-from ..macro import C_DTYPE, F_DTYPE
-from typing import Iterable, Union, List
+from ..macro import F_DTYPE
+from typing import Iterable
 from enum import IntEnum
 
 
@@ -401,13 +400,13 @@ class Operation(Operator, metaclass=ABCMeta):
                 parameters. Defaults to None.
         """
         if init_params is not None:
-            #print(f"init_params: {init_params}")
-            #print(f"self.params: {self.params}")
+            # print(f"init_params: {init_params}")
+            # print(f"self.params: {self.params}")
             if isinstance(init_params, Iterable):
                 for k, init_param in enumerate(init_params):
-                    #print(f"init_param: {init_param}")
-                    #print(f"k: {k}")
-                    #print(f"self.params[:, k]: {self.params[:, k]}")
+                    # print(f"init_param: {init_param}")
+                    # print(f"k: {k}")
+                    # print(f"self.params[:, k]: {self.params[:, k]}")
                     # Extract scalar value if init_param is a tensor
                     if isinstance(init_param, torch.Tensor):
                         if init_param.numel() == 1:
@@ -418,8 +417,12 @@ class Operation(Operator, metaclass=ABCMeta):
                             # Multi-element tensor (like for u2, u3 gates)
                             # Need to handle each element individually
                             for i in range(init_param.numel()):
-                                if k+i < self.params.shape[1]:  # Ensure we don't exceed parameter dimensions
-                                    torch.nn.init.constant_(self.params[:, k+i], init_param[i].item())
+                                if (
+                                    k + i < self.params.shape[1]
+                                ):  # Ensure we don't exceed parameter dimensions
+                                    torch.nn.init.constant_(
+                                        self.params[:, k + i], init_param[i].item()
+                                    )
                     else:
                         scalar_value = init_param
                         torch.nn.init.constant_(self.params[:, k], scalar_value)
@@ -436,8 +439,12 @@ class Operation(Operator, metaclass=ABCMeta):
                         torch.nn.init.constant_(self.params, scalar_value)
                     else:
                         for i in range(init_params.numel()):
-                            if i < self.params.shape[1]:  # Ensure we don't exceed parameter dimensions
-                                torch.nn.init.constant_(self.params[:, i], init_params[i].item())
+                            if (
+                                i < self.params.shape[1]
+                            ):  # Ensure we don't exceed parameter dimensions
+                                torch.nn.init.constant_(
+                                    self.params[:, i], init_params[i].item()
+                                )
                 else:
                     scalar_value = init_params
                     torch.nn.init.constant_(self.params, scalar_value)

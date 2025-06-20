@@ -134,7 +134,7 @@ print(op.params.grad)
 
 # Apply gates to qdev with tq.QuantumModule
 ops = [
-    {'name': 'hadamard', 'wires': 0}, 
+    {'name': 'hadamard', 'wires': 0},
     {'name': 'cnot', 'wires': [0, 1]},
     {'name': 'rx', 'wires': 0, 'params': 0.5, 'trainable': True},
     {'name': 'u3', 'wires': 0, 'params': [0.1, 0.2, 0.3], 'trainable': True},
@@ -271,7 +271,7 @@ python mnist.py
 | measure.py   | Measurement of quantum states to get classical values |
 | graph.py   | Quantum gate graph used in static mode |
 | super_layer.py   | Layer templates for SuperCircuits |
-| plugins/qiskit*   | Convertors and processors for easy deployment on IBMQ |
+| plugins/qiskit*   | Converters and processors for easy deployment on IBMQ |
 | examples/| More examples for training QML and VQE models |
 
 ## Coding Style

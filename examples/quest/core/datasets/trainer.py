@@ -63,7 +63,7 @@ class trainer:
                 )
             self.scheduler.step()
             print(
-                f"[{epoch + 1} / {configs.num_epochs}],sqrtloss={loss_sum**0.5} \r",
+                f"[{epoch + 1} / {configs.num_epochs}], sqrtloss={loss_sum**0.5} \r",
                 end="",
             )
             self.training_data["train_loss"].append(loss_sum**0.5)
@@ -87,7 +87,7 @@ class trainer:
             pred_error += ((out - batch.y.to(self.device)) ** 2).sum().item()
         pred_error = (pred_error / len(self.loaders["valid"].dataset)) ** 0.5
         print(
-            f"\t\t\t\t\t\t val_error:{pred_error} \r",
+            f"\t\t\t\t\t\t val_error: {pred_error} \r",
             end="",
         )
         return pred_error
@@ -111,8 +111,8 @@ class trainer:
         self.training_data["test_y"] = mydict["test_y"]
         self.test_error = mydict["test_error"]
         self.best = mydict["best"]
-        print(f"test_error:{self.test_error}")
-        print(f"best_val_error:{self.best}")
+        print(f"test_error: {self.test_error}")
+        print(f"best_val_error: {self.best}")
 
     def test(self):
         self.training_data["test_pred"] = np.array([])
@@ -161,7 +161,7 @@ class trainer:
             test_error += ((out - batch.y.to(self.device)) ** 2).sum().item()
         test_error = (test_error / len(testdataset.dataset)) ** 0.5
         self.training_data["test_error_with" + dataname] = test_error
-        print(f"test_error:{self.test_error}")
+        print(f"test_error: {self.test_error}")
         # draw_scatter(
         #     self.training_data["test_y_with"],
         #     self.training_data["test_pred_with"],

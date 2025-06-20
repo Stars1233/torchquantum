@@ -22,20 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import os
 import pdb
-import pickle
-import random
-import sys
-from typing import Callable, List, Optional, Tuple
+from typing import List
 
-import numpy as np
-import scipy
-import scipy.signal
-import torch
 from torchpack.datasets.dataset import Dataset
 
-from utils.circ_dag_converter import circ_to_dag_with_data
 from utils.load_data import load_data_from_pyg
 
 __all__ = ["CircDataset", "Circ"]
@@ -135,7 +126,7 @@ class Circ(Dataset):
 if __name__ == "__main__":
     # import matplotlib
     # matplotlib.use("TkAgg")
-    from matplotlib import pyplot as plt
+    pass
 
     pdb.set_trace()
     circ_data = CircDataset(

@@ -8,7 +8,7 @@ See this tutorial video for detailed explanations:
 
 [![video](https://img.youtube.com/vi/5sfF4TRxFro/0.jpg)](https://www.youtube.com/watch?v=5sfF4TRxFro)
 
-Referece: [Supervised quantum machine learning models are kernel methods
+Reference: [Supervised quantum machine learning models are kernel methods
 ](https://arxiv.org/abs/2101.11020)
 
 

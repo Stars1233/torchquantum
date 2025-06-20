@@ -24,15 +24,10 @@ SOFTWARE.
 
 import torch
 import torch.nn.functional as F
-import torch.optim as optim
 import numpy as np
 
 import torchquantum as tq
-import torchquantum.functional as tqf
 from torchquantum.layer.layers import SethLayer0
-
-from torchquantum.dataset import MNIST
-from torch.optim.lr_scheduler import CosineAnnealingLR
 
 
 class QFCModel(tq.QuantumModule):

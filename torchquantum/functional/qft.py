@@ -1,14 +1,9 @@
-import functools
 import torch
 import numpy as np
 
-from typing import Callable, Union, Optional, List, Dict, TYPE_CHECKING
-from ..macro import C_DTYPE, F_DTYPE, ABC, ABC_ARRAY, INV_SQRT2
-from ..util.utils import pauli_eigs, diag
-from torchpack.utils.logging import logger
-from torchquantum.util import normalize_statevector
+from typing import TYPE_CHECKING
 
-from .gate_wrapper import gate_wrapper, apply_unitary_einsum, apply_unitary_bmm
+from .gate_wrapper import gate_wrapper
 
 if TYPE_CHECKING:
     from torchquantum.device import QuantumDevice

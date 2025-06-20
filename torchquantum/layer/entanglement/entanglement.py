@@ -22,11 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import torch
-import torch.nn as nn
 import torchquantum as tq
-import torchquantum.functional as tqf
-import numpy as np
 
 # from torchquantum.layer.layers import (
 #     Op1QAllLayer,
@@ -34,9 +30,6 @@ import numpy as np
 # )
 from .op2_layer import Op2QAllLayer
 
-from typing import Iterable
-from torchquantum.plugin.qiskit import QISKIT_INCOMPATIBLE_FUNC_NAMES
-from torchpack.utils.logging import logger
 
 __all__ = [
     "EntangleLinear",
@@ -192,7 +185,7 @@ class EntanglePairwise(tq.QuantumModule):
 
     """pattern:
     [0, 1], [2, 3], [4, 5]
-    [1, 2], [3, 4] 
+    [1, 2], [3, 4]
     """
 
     def __init__(

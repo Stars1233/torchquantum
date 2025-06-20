@@ -37,7 +37,6 @@ import torch.optim as optim
 import argparse
 
 import torchquantum as tq
-import torchquantum.functional as tqf
 
 from torchquantum.measurement import expval_joint_analytical
 
@@ -197,7 +196,7 @@ def main():
 
     for epoch in range(1, n_epochs + 1):
         # train
-        print(f"Epoch {epoch}:")
+        print(f"Epoch {epoch}: ")
         train(dataflow, model, device, optimizer)
         print(optimizer.param_groups[0]["lr"])
 

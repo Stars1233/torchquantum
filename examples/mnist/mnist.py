@@ -96,10 +96,12 @@ class QFCModel(tq.QuantumModule):
         if use_qiskit:
             # use qiskit to process the circuit
             # create the qiskit circuit for encoder
-            self.encoder(qdev, x)  
+            self.encoder(qdev, x)
             op_history_parameterized = qdev.op_history
             qdev.reset_op_history()
-            encoder_circs = op_history2qiskit_expand_params(self.n_wires, op_history_parameterized, bsz=bsz)
+            encoder_circs = op_history2qiskit_expand_params(
+                self.n_wires, op_history_parameterized, bsz=bsz
+            )
 
             # create the qiskit circuit for trainable quantum layers
             self.q_layer(qdev)
@@ -179,7 +181,11 @@ def main():
         "--static", action="store_true", help="compute with " "static mode"
     )
     parser.add_argument("--pdb", action="store_true", help="debug with pdb")
-    parser.add_argument("--qiskit-simulation", action="store_true", help="run on a real quantum computer")
+    parser.add_argument(
+        "--qiskit-simulation",
+        action="store_true",
+        help="run on a real quantum computer",
+    )
     parser.add_argument(
         "--wires-per-block", type=int, default=2, help="wires per block int static mode"
     )
@@ -233,7 +239,7 @@ def main():
 
     for epoch in range(1, n_epochs + 1):
         # train
-        print(f"Epoch {epoch}:")
+        print(f"Epoch {epoch}: ")
         train(dataflow, model, device, optimizer)
         print(optimizer.param_groups[0]["lr"])
 
@@ -247,11 +253,10 @@ def main():
     if args.qiskit_simulation:
         # run on Qiskit simulator and real Quantum Computers
         try:
-            from qiskit import IBMQ
             from torchquantum.plugin import QiskitProcessor
 
             # firstly perform simulate
-            print(f"\nTest with Qiskit Simulator")
+            print("\nTest with Qiskit Simulator")
             processor_simulation = QiskitProcessor(use_real_qc=False)
             model.set_qiskit_processor(processor_simulation)
             valid_test(dataflow, "test", model, device, qiskit=True)

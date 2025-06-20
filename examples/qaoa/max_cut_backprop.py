@@ -29,7 +29,6 @@ import random
 import numpy as np
 import argparse
 
-from torchquantum.functional import mat_dict
 
 from torchquantum.measurement import expval_joint_analytical
 
@@ -174,9 +173,7 @@ def backprop_optimize(model, n_steps=100, lr=0.1):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--steps", type=int, default=300, help="number of steps"
-    )
+    parser.add_argument("--steps", type=int, default=300, help="number of steps")
     args = parser.parse_args()
 
     # create a input_graph

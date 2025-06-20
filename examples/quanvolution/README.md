@@ -9,7 +9,7 @@ See this tutorial video for detailed explanations:
 
 [![video](https://img.youtube.com/vi/-Grfxkg3-DI/0.jpg)](https://www.youtube.com/watch?v=-Grfxkg3-DI)
 
-Referece: [Quanvolutional Neural Networks: Powering Image Recognition with Quantum Circuits](https://arxiv.org/abs/1904.04767)
+Reference: [Quanvolutional Neural Networks: Powering Image Recognition with Quantum Circuits](https://arxiv.org/abs/1904.04767)
 
 ### Outline
 1. Introduction to Quanvolutional Neural Network.

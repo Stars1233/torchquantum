@@ -1,5 +1,5 @@
-from typing import Callable, Union, Optional, List, Dict, TYPE_CHECKING
-from ..macro import C_DTYPE, F_DTYPE, ABC, ABC_ARRAY, INV_SQRT2
+from typing import Union, List, TYPE_CHECKING
+from ..macro import C_DTYPE, INV_SQRT2
 import torch
 import numpy as np
 from .gate_wrapper import gate_wrapper
