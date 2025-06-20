@@ -9,9 +9,9 @@ pathos>=0.2.7
 pylatexenc>=2.10
 pyscf>=2.0.1
 qiskit==1.4.3
-qiskit-aer
-qiskit_ibm_runtime
 recommonmark
+qiskit_ibm_runtime
+qiskit-aer
 
 scipy>=1.5.2
 setuptools>=52.0.0

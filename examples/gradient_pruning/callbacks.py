@@ -262,6 +262,7 @@ class GradRestore(Callback):
 
     def __init__(self) -> None:
         self.trainer = None
+        pass
 
     def _set_trainer(self, trainer: Trainer) -> None:
         self.trainer = trainer

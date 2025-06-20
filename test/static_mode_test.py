@@ -159,8 +159,8 @@ class QLayer(tq.QuantumModule):
 
             """
             ORIGINAL: n_func_wires = op_name_dict[func]().num_wires
-            Changed to avoid initialization error with QubitUnitaryFast which requires
-            parameters during instantiation. Instead, we access num_wires directly
+            Changed to avoid initialization error with QubitUnitaryFast which requires 
+            parameters during instantiation. Instead, we access num_wires directly 
             from the class since it's a class attribute.
             """
 
@@ -168,7 +168,7 @@ class QLayer(tq.QuantumModule):
             # print(f"Operator class: {op_class}")
             # print(f"Number of wires: {op_class.num_wires}")
             n_func_wires = op_class.num_wires
-
+            
             if n_func_wires > self.n_wires:
                 continue
             cnt += 1
@@ -232,27 +232,25 @@ class QLayer(tq.QuantumModule):
                         self.rand_mat[: 2**n_func_wires, : 2**n_func_wires]
                     )
                     params = u @ v
-
+                    
                     # Debug prints
-                    # print(f"SVD components for {func}:")
-                    # print(f"U singular values: {np.max(np.abs(u)):.6f}, {np.min(np.abs(u)):.6f}")
-                    # print(f"Singular values: {s}")
-                    # print(f"V singular values: {np.max(np.abs(v)):.6f}, {np.min(np.abs(v)):.6f}")
-
+                    #print(f"SVD components for {func}:")
+                    #print(f"U singular values: {np.max(np.abs(u)):.6f}, {np.min(np.abs(u)):.6f}")
+                    #print(f"Singular values: {s}")
+                    #print(f"V singular values: {np.max(np.abs(v)):.6f}, {np.min(np.abs(v)):.6f}")
+                    
                     # Check unitarity
-                    # conj_transpose = np.conjugate(params.T)
-                    # product = np.matmul(conj_transpose, params)
-                    # identity = np.eye(params.shape[0], dtype=complex)
-                    # max_diff = np.max(np.abs(product - identity))
+                    #conj_transpose = np.conjugate(params.T)
+                    #product = np.matmul(conj_transpose, params)
+                    #identity = np.eye(params.shape[0], dtype=complex)
+                    #max_diff = np.max(np.abs(product - identity))
                     # print(f"Unitarity check: max_diff={max_diff:.8f}")
-
+                    
                     # If inverse, check inverse matrix too
                     if is_inverse:
-                        inv_params = np.conjugate(
-                            params.T
-                        )  # Unitary inverse = conjugate transpose
-                        # print(f"Inverse unitarity check: max_diff={np.max(np.abs(np.matmul(inv_params, params) - identity)):.8f}")
-
+                        inv_params = np.conjugate(params.T)  # Unitary inverse = conjugate transpose
+                        #print(f"Inverse unitarity check: max_diff={np.max(np.abs(np.matmul(inv_params, params) - identity)):.8f}")
+                    
                     func_name_dict[func](
                         self.q_device,
                         wires=func_wires,
@@ -281,9 +279,9 @@ class QLayer(tq.QuantumModule):
                         inverse=is_inverse,
                     )
                 else:
-                    # print(f"func: {func}")
-                    # print(f"params: {params}")
-                    # print(f"static: {self.static_mode}")
+                    #print(f"func: {func}")
+                    #print(f"params: {params}")
+                    #print(f"static: {self.static_mode}")
                     func_name_dict[func](
                         self.q_device,
                         wires=func_wires,
@@ -292,8 +290,8 @@ class QLayer(tq.QuantumModule):
                         parent_graph=self.graph,
                         inverse=is_inverse,
                     )
-                    # print(f"func_name_dict[func]: {func_name_dict[func]}")
-                    # print("\n")
+                    #print(f"func_name_dict[func]: {func_name_dict[func]}")
+                    #print("\n")
 
         self.x_idx = 0
 

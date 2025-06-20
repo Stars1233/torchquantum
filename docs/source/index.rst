@@ -309,7 +309,7 @@ Files
 +-----------------------------------+-----------------------------------+
 | super_layer.py                    | Layer templates for SuperCircuits |
 +-----------------------------------+-----------------------------------+
-| plugins/qiskit\*                  | Converters and processors for     |
+| plugins/qiskit\*                  | Convertors and processors for     |
 |                                   | easy deployment on IBMQ           |
 +-----------------------------------+-----------------------------------+
 | examples/                         | More examples for training QML    |

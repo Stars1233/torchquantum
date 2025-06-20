@@ -297,16 +297,17 @@ def main():
         scheduler.step()
 
     try:
+        from qiskit import IBMQ
         from torchquantum.plugin import QiskitProcessor
 
-        print("\nTest with Qiskit Simulator")
+        print(f"\nTest with Qiskit Simulator")
         processor_simulation = QiskitProcessor(use_real_qc=False)
         model.set_qiskit_processor(processor_simulation)
-        valid_test(dataflow, q_device, "valid", model, device, qiskit=True)
+        valid_test(dataflow, q_device, "test", model, device, qiskit=True)
 
         # final valid
-        # valid_test(dataflow, q_device, 'valid', model, device, True)
-    except Exception:
+        valid_test(dataflow, q_device, "valid", model, device, True)
+    except:
         pass
 
 

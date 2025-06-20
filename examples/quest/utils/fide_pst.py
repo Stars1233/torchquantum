@@ -26,7 +26,8 @@ import numpy as np
 import pickle
 import sys
 import copy
-from qiskit import Are
+from qiskit import QuantumCircuit
+from qiskit import Aer, transpile
 from rand_circ_native import *
 
 
@@ -61,7 +62,7 @@ def get_modified_backend(backend, mydict):
 
 
 def free_sim(circ):
-    backend = Are.get_backend("aer_simulator")
+    backend = Aer.get_backend("aer_simulator")
     circ.save_density_matrix()
     result = backend.run(circ).result()
     noise_dm = result.data()["density_matrix"].data

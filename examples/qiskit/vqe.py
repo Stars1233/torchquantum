@@ -42,11 +42,16 @@ from qiskit_nature.mappers.second_quantization import ParityMapper
 
 # pylint: enable=line-too-long
 
+import matplotlib.pyplot as plt
 import numpy as np
 from qiskit_nature.circuit.library import UCCSD, HartreeFock
-from qiskit.algorithms.optimizers import SLSQP
+from qiskit.circuit.library import EfficientSU2
+from qiskit.algorithms.optimizers import COBYLA, SPSA, SLSQP
 from qiskit.opflow import TwoQubitReduction
-from qiskit import BasicAer
+from qiskit import BasicAer, Aer
+from qiskit.utils import QuantumInstance
+from qiskit.utils.mitigation import CompleteMeasFitter
+from qiskit.providers.aer.noise import NoiseModel
 
 import qiskit_nature
 
@@ -128,8 +133,8 @@ for dist in distances:
     vqe_energies.append(vqe_result)
     print(
         f"Interatomic Distance: {np.round(dist, 2)}",
-        f"VQE Result: {vqe_result:.5f} ",
-        f"Exact Energy: {exact_energies[-1]:.5f} ",
+        f"VQE Result: {vqe_result:.5f}",
+        f"Exact Energy: {exact_energies[-1]:.5f}",
     )
 
 print("All energies have been calculated")

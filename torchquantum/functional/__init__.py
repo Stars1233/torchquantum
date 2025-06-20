@@ -22,9 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .hadamard import hadamard, shadamard, _hadamard_mat_dict, h, ch, chadamard
-from .rx import rx, rxx, crx, xx, _rx_mat_dict
-from .ry import ry, ryy, cry, yy, _ry_mat_dict
+from .gate_wrapper import gate_wrapper, apply_unitary_einsum, apply_unitary_bmm
+from .hadamard import hadamard, shadamard, _hadamard_mat_dict, h, ch, sh, chadamard
+from .rx import rx, rxx, crx, xx, _rx_mat_dict, rx_matrix, rxx_matrix, crx_matrix
+from .ry import ry, ryy, cry, yy, _ry_mat_dict, ry_matrix, ryy_matrix, cry_matrix
 from .rz import (
     rz,
     rzz,
@@ -34,27 +35,38 @@ from .rz import (
     multirz,
     rzx,
     _rz_mat_dict,
+    rz_matrix,
+    rzz_matrix,
+    crz_matrix,
+    multirz_matrix,
+    rzx_matrix,
 )
-from .phase_shift import phaseshift, p, _phaseshift_mat_dict
-from .rot import rot, crot, _rot_mat_dict
+from .phase_shift import phaseshift_matrix, phaseshift, p, _phaseshift_mat_dict
+from .rot import rot, crot, rot_matrix, crot_matrix, _rot_mat_dict
 from .reset import reset
-from .xx_min_yy import xxminyy, _xxminyy_mat_dict
-from .xx_plus_yy import xxplusyy, _xxplusyy_mat_dict
-from .u1 import u1, cu1, _u1_mat_dict, cp, cr, cphase
-from .u2 import u2, cu2, _u2_mat_dict
-from .u3 import u, u3, cu3, cu, _u3_mat_dict
+from .xx_min_yy import xxminyy, xxminyy_matrix, _xxminyy_mat_dict
+from .xx_plus_yy import xxplusyy, xxplusyy_matrix, _xxplusyy_mat_dict
+from .u1 import u1, cu1, u1_matrix, cu1_matrix, _u1_mat_dict, cp, cr, cphase
+from .u2 import u2, cu2, u2_matrix, cu2_matrix, _u2_mat_dict
+from .u3 import u, u3, cu3, cu, cu_matrix, u3_matrix, cu3_matrix, _u3_mat_dict
 from .qubit_unitary import (
     qubitunitary,
     qubitunitaryfast,
     qubitunitarystrict,
+    qubitunitary_matrix,
+    qubitunitaryfast_matrix,
+    qubitunitarystrict_matrix,
     _qubitunitary_mat_dict,
 )
 from .single_excitation import (
     singleexcitation,
+    singleexcitation_matrix,
     _singleexcitation_mat_dict,
 )
 from .paulix import (
     _x_mat_dict,
+    multicnot_matrix,
+    multixcnot_matrix,
     paulix,
     cnot,
     multicnot,
@@ -72,9 +84,9 @@ from .paulix import (
 )
 from .pauliy import _y_mat_dict, pauliy, cy, y
 from .pauliz import _z_mat_dict, pauliz, cz, ccz, z
-from .qft import _qft_mat_dict, qft
-from .r import _r_mat_dict, r
-from .global_phase import _globalphase_mat_dict, globalphase
+from .qft import _qft_mat_dict, qft, qft_matrix
+from .r import _r_mat_dict, r, r_matrix
+from .global_phase import _globalphase_mat_dict, globalphase, globalphase_matrix
 from .sx import _sx_mat_dict, sx, c3sx, sxdg, csx
 from .i import _i_mat_dict, i
 from .s import _s_mat_dict, s, sdg, cs, csdg

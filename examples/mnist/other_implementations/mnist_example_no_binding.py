@@ -242,7 +242,7 @@ def main():
 
     for epoch in range(1, n_epochs + 1):
         # train
-        print(f"Epoch {epoch}: ")
+        print(f"Epoch {epoch}:")
         train(dataflow, model, device, optimizer)
         print(optimizer.param_groups[0]["lr"])
 
@@ -255,10 +255,11 @@ def main():
 
     # run on Qiskit simulator and real Quantum Computers
     try:
+        from qiskit import IBMQ
         from torchquantum.plugin import QiskitProcessor
 
         # firstly perform simulate
-        print("\nTest with Qiskit Simulator")
+        print(f"\nTest with Qiskit Simulator")
         processor_simulation = QiskitProcessor(use_real_qc=False)
         model.set_qiskit_processor(processor_simulation)
         valid_test(dataflow, "test", model, device, qiskit=True)

@@ -25,6 +25,12 @@ SOFTWARE.
 
 import torch
 import torchquantum as tq
+from torchquantum.layer.layers import (
+    LayerTemplate0,
+    Op1QAllLayer,
+    RandomOp1All,
+)
+from torchquantum.layer.entanglement import Op2QAllLayer
 
 __all__ = [
     "GlobalR",

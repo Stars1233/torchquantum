@@ -1,8 +1,12 @@
 import torch
+import torch.nn as nn
 import torchquantum as tq
+import torchquantum.functional as tqf
+import numpy as np
 
 from typing import Iterable
-
+from torchquantum.plugin.qiskit import QISKIT_INCOMPATIBLE_FUNC_NAMES
+from torchpack.utils.logging import logger
 
 class QFTLayer(tq.QuantumModule):
     def __init__(

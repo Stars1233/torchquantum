@@ -1,5 +1,6 @@
 import torchquantum as tq
-from qiskit_aer import Are
+import qiskit
+from qiskit_aer import Aer
 from qiskit import transpile
 
 from torchquantum.util import (
@@ -19,7 +20,6 @@ all_pairs = [
 
 ITERATIONS = 2
 
-
 def test_rotgates():
     # test each pair
     for pair in all_pairs:
@@ -29,15 +29,14 @@ def test_rotgates():
             for _ in range(ITERATIONS):
                 # generate random parameters
                 params = [
-                    np.random.uniform(-2 * np.pi, 2 * np.pi)
-                    for _ in range(pair["params"])
+                    np.random.uniform(-2 * np.pi, 2 * np.pi) for _ in range(pair["params"])
                 ]
 
                 # create the qiskit circuit
                 qiskit_circuit = pair["qiskit"](num_wires, *params)
 
                 # get the unitary from qiskit
-                backend = Are.get_backend("unitary_simulator")
+                backend = Aer.get_backend("unitary_simulator")
                 qiskit_circuit = transpile(qiskit_circuit, backend)
                 result = backend.run(qiskit_circuit).result()
                 unitary_qiskit = result.get_unitary(qiskit_circuit)
@@ -56,4 +55,4 @@ def test_rotgates():
 
                 assert np.allclose(
                     unitary_tq * phase, unitary_qiskit, atol=1e-6
-                ), f"{pair} not equal with {params = }!"
+                ), f"{pair} not equal with {params=}!"

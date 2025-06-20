@@ -40,7 +40,6 @@ if __name__ == "__main__":
 
     if args.pdb:
         import pdb
-
         pdb.set_trace()
 
     # target_unitary = torch.tensor([[0, 1], [1, 0]], dtype=torch.complex64)

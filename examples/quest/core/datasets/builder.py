@@ -29,8 +29,9 @@ from torch import nn
 from torchpack.utils.config import configs
 from torchpack.utils.typing import Optimizer, Scheduler
 
-from core.datasets.circs import CircDataset
+from core.datasets.circs import Circ, CircDataset
 from core.datasets.model import Global_Model, Liu_Model, Simple_Model
+from utils.load_data import load_data_from_pyg
 
 __all__ = [
     "make_dataset",

@@ -33,6 +33,7 @@ from torchquantum.measurement import expval_joint_analytical, expval_joint_sampl
 from torchquantum.plugin import op_history2qiskit
 from torchquantum.util import switch_little_big_endian_state
 
+import torch
 
 def test_expval_observable():
     # seed = 0

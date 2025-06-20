@@ -27,7 +27,7 @@ import time
 from scipy.optimize import minimize
 from sklearn.gaussian_process import GaussianProcessRegressor as GPR
 from scipy.optimize import LinearConstraint
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel, Matern, WhiteKernel
 from scipy.stats import norm
 
 
@@ -53,7 +53,7 @@ def acquisition(x_scaled, hyper_param, model, min_Y):  # x_scaled: 1 * dim
         >>> min_Y = 0.1
         >>> acquisition_value = acquisition(x, hyper_param, model, min_Y)
     """
-
+    
     x_scaled = x_scaled.reshape(1, -1)
     if "LCB" in hyper_param[0]:
         mean, std = model.predict(x_scaled, return_std=True)

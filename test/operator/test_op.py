@@ -33,6 +33,7 @@ from torchquantum.util import switch_little_big_endian_matrix
 from tqdm import tqdm
 
 import qiskit.circuit.library.standard_gates as qiskit_gate
+import qiskit.circuit.library as qiskit_library
 from qiskit.quantum_info import Operator
 
 

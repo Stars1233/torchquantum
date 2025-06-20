@@ -29,8 +29,8 @@ import shutil
 if __name__ == "__main__":
     path = os.path.abspath(qiskit.__file__)
     print(path)
-    # path for are provider
-    path_provider = path.replace("__init__.py", "providers/are/backends/aerbackend.py")
+    # path for aer provider
+    path_provider = path.replace("__init__.py", "providers/aer/backends/aerbackend.py")
     print(path_provider)
     fixed_file = "aerbackend_fixed.py"
 

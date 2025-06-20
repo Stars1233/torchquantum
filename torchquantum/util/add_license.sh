@@ -1,7 +1,7 @@
 #!/bin/bash
 #script to loop through directories to merge files
 
-walk_dir () {
+walk_dir () {    
     shopt -s nullglob dotglob
 
     for pathname in "$1"/*; do

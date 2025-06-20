@@ -22,5 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-
+from .utils import *
+from .sesolve import sesolve
+from .mesolve import mesolve
+from .pulses import *
 # from .smesolve import smesolve

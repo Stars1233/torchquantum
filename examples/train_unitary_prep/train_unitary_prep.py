@@ -59,14 +59,7 @@ def train(target_unitary, model, optimizer):
     # https://link.aps.org/accepted/10.1103/PhysRevA.95.042318 unitary fidelity according to table 1
 
     # compute the unitary infidelity
-    loss = (
-        1
-        - (
-            torch.trace(target_unitary.T.conj() @ result_unitary)
-            / target_unitary.shape[0]
-        ).abs()
-        ** 2
-    )
+    loss = 1 - (torch.trace(target_unitary.T.conj() @ result_unitary) / target_unitary.shape[0]).abs() ** 2
 
     optimizer.zero_grad()
     loss.backward()
@@ -90,7 +83,6 @@ def main():
 
     if args.pdb:
         import pdb
-
         pdb.set_trace()
 
     seed = 42
@@ -108,8 +100,13 @@ def main():
     scheduler = CosineAnnealingLR(optimizer, T_max=n_epochs)
 
     target_unitary = torch.tensor(
-        [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1j]], dtype=torch.complex64
-    )
+    [
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1j]
+    ]
+    , dtype=torch.complex64)
 
     for epoch in range(1, n_epochs + 1):
         print(f"Epoch {epoch}, LR: {optimizer.param_groups[0]['lr']}")

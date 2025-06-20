@@ -24,6 +24,7 @@ SOFTWARE.
 
 from torchquantum.plugin import qiskit2tq_op_history
 import torchquantum as tq
+from qiskit.circuit.random import random_circuit
 from qiskit import QuantumCircuit
 
 

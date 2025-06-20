@@ -30,7 +30,8 @@ from qiskit import QuantumCircuit
 from qiskit.compiler import transpile
 from qiskit.converters import circuit_to_dag
 from qiskit.dagcircuit import DAGInNode, DAGOpNode, DAGOutNode
-from qiskit.providers.fake_provider import FakeJakarta
+from qiskit.providers.aer import AerSimulator
+from qiskit.providers.fake_provider import FakeJakarta, FakeLima
 from qiskit.transpiler.passes import RemoveBarriers
 from torch_geometric.utils.convert import from_networkx
 
@@ -73,7 +74,7 @@ def circ_to_dag_with_data(circ, mydict, n_qubit=10):
     for node_idx, node in enumerate(dag_list):
         node_type, qubit_idxs, noise_info = data_generator(node, mydict)
         for qubit_idx in qubit_idxs:
-            if qubit_idx not in used_qubit_idx_list:
+            if not qubit_idx in used_qubit_idx_list:
                 used_qubit_idx_list[qubit_idx] = used_qubit_idx
                 used_qubit_idx += 1
         data = torch.zeros(NUM_NODE_TYPE + n_qubit + NUM_ERROR_DATA + 1)

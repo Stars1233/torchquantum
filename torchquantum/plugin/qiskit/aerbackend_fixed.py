@@ -12,7 +12,7 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 """
-Qiskit Are qasm simulator backend.
+Qiskit Aer qasm simulator backend.
 """
 
 import copy
@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
 
 
 class AerBackend(Backend, ABC):
-    """Qiskit Are Backend class."""
+    """Qiskit Aer Backend class."""
 
     def __init__(
         self,
@@ -53,7 +53,7 @@ class AerBackend(Backend, ABC):
         backend_options=None,
         provider=None,
     ):
-        """Are class for backends.
+        """Aer class for backends.
 
         This method should initialize the module and its configuration, and
         raise an exception if a component of the module is
@@ -71,13 +71,13 @@ class AerBackend(Backend, ABC):
         """
         # Store original configuration for compatibility
         self._configuration = configuration
-
+        
         # For BackendV2, we need to extract and pass the required attributes
         super().__init__(
             provider=provider,
             name=configuration.backend_name,
             description=getattr(configuration, "description", ""),
-            backend_version=configuration.backend_version,
+            backend_version=configuration.backend_version
         )
 
         # Initialize backend properties and pulse defaults.
@@ -188,7 +188,7 @@ class AerBackend(Backend, ABC):
             # A work around to support both qobj options and run options until
             # qobj is deprecated is to copy all the set qobj.config fields into
             # run_options that don't override existing fields. This means set
-            # run_options fields will take precedence over the value for those
+            # run_options fields will take precidence over the value for those
             # fields that are set via assemble.
             if not run_options:
                 run_options = circuits.config.__dict__
@@ -430,7 +430,7 @@ class AerBackend(Backend, ABC):
         ):
             npm = noise_model._pass_manager()
             if npm is not None:
-                # Get indices of circuits that need noise transpiling
+                # Get indicies of circuits that need noise transpiling
                 transpile_idxs = [
                     idx for idx, optype in enumerate(optypes) if Delay in optype
                 ]
@@ -502,9 +502,11 @@ class AerBackend(Backend, ABC):
         Returns:
             dict: return a dictionary of results.
         """
+        pass
 
     def _validate(self, qobj):
         """Validate the qobj for the backend"""
+        pass
 
     def set_option(self, key, value):
         """Special handling for setting backend options.

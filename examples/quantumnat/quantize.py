@@ -1,10 +1,10 @@
-"""
+'''
 Description:
 Author: Jiaqi Gu (jqgu@utexas.edu)
 Date: 2021-05-09 21:28:08
 LastEditors: Jiaqi Gu (jqgu@utexas.edu)
 LastEditTime: 2021-05-11 01:19:11
-"""
+'''
 from typing import Optional
 
 import torch
@@ -53,7 +53,8 @@ class PACTQuantFunc(torch.autograd.Function):
     """
 
     @staticmethod
-    def forward(ctx, input, level, alpha, quant_noise_mask, lower_bound, upper_bound):
+    def forward(ctx, input, level, alpha, quant_noise_mask, lower_bound,
+                upper_bound):
         # where_input_clipped = (input < -1) | (input > alpha)
         # where_input_ltalpha = (input < alpha)
         # ctx.save_for_backward(where_input_clipped, where_input_ltalpha)
@@ -66,11 +67,7 @@ class PACTQuantFunc(torch.autograd.Function):
         # input_q = input.div(eps).floor_().mul_(eps)
 
         if quant_noise_mask is not None:
-            return (
-                input_q.data.sub_(input.data)
-                .masked_fill_(quant_noise_mask, 0)
-                .add_(input)
-            )
+            return input_q.data.sub_(input.data).masked_fill_(quant_noise_mask, 0).add_(input)
         else:
             return input_q
 
@@ -104,20 +101,10 @@ class PACTActivationQuantizer(torch.nn.Module):
     - running variance with momentum 0.9
     """
 
-    def __init__(
-        self,
-        module: torch.nn.Module,
-        precision: Optional[float] = None,
-        level=None,
-        alpha: float = 1.0,
-        backprop_alpha: bool = True,
-        statistics_only: bool = False,
-        leaky: Optional[float] = None,
-        quant_ratio: float = 1.0,
-        device: Device = torch.device("cuda"),
-        lower_bound=-2,
-        upper_bound=2,
-    ) -> None:
+    def __init__(self, module: torch.nn.Module, precision: Optional[float]=None, level=None, alpha: float = 1.0, backprop_alpha: bool = True,
+                 statistics_only: bool = False, leaky: Optional[float] =
+                 None, quant_ratio: float = 1.0, device: Device =
+                 torch.device("cuda"), lower_bound=-2, upper_bound=2) -> None:
         r"""Constructor. Initializes a :py:class:`torch.nn.Parameter` for :math:`\alpha` and sets
             up the initial value of the `statistics_only` member.
         :param precision: instance defining the current quantization level (default `None`).
@@ -139,9 +126,8 @@ class PACTActivationQuantizer(torch.nn.Module):
         self.precision = precision
         self.level = level
         self.device = device
-        self.alpha = torch.nn.Parameter(
-            torch.tensor((alpha,), device=device), requires_grad=backprop_alpha
-        )
+        self.alpha = torch.nn.Parameter(torch.tensor(
+            (alpha,), device=device), requires_grad=backprop_alpha)
         self.alpha_p = alpha
         self.statistics_only = statistics_only
         self.deployment = False
@@ -151,43 +137,39 @@ class PACTActivationQuantizer(torch.nn.Module):
         self.upper_bound = upper_bound
 
         # these are only used to gather statistics
-        self.max = torch.nn.Parameter(
-            torch.zeros_like(self.alpha.data), requires_grad=False
-        )
-        self.min = torch.nn.Parameter(
-            torch.zeros_like(self.alpha.data), requires_grad=False
-        )
+        self.max = torch.nn.Parameter(torch.zeros_like(
+            self.alpha.data), requires_grad=False)
+        self.min = torch.nn.Parameter(torch.zeros_like(
+            self.alpha.data), requires_grad=False)
         self.running_mean = torch.nn.Parameter(
-            torch.zeros_like(self.alpha.data), requires_grad=False
-        )
+            torch.zeros_like(self.alpha.data), requires_grad=False)
         self.running_var = torch.nn.Parameter(
-            torch.ones_like(self.alpha.data), requires_grad=False
-        )
+            torch.ones_like(self.alpha.data),  requires_grad=False)
 
         self.precise = False
 
         # set quant noise ratio
         self.set_quant_ratio(quant_ratio)
 
-        # quantization hook
+        ## quantization hook
         self.handle = None
         # self.register_hook()
 
     def set_static_precision(self, limit_at_32_bits: bool = True, **kwargs) -> None:
-        r"""Sets static parameters used only for deployment."""
+        r"""Sets static parameters used only for deployment.
+        """
         # item() --> conversion to float
-        # apparently causes a slight, but not invisible, numerical divergence
+        # apparently causes a slight, but not invisibile, numerical divergence
         # between FQ and QD stages
-        self.eps_static = self.alpha.clone().detach() / (2.0 ** (self.precision) - 1)
+        self.eps_static = self.alpha.clone().detach()/(2.0**(self.precision)-1)
         self.alpha_static = self.alpha.clone().detach()
         # D is selected as a power-of-two
-        D = 2.0 ** torch.ceil(
-            torch.log2(self.requantization_factor * self.eps_static / self.eps_in)
-        )
+        D = 2.0**torch.ceil(torch.log2(self.requantization_factor *
+                                       self.eps_static / self.eps_in))
         if not limit_at_32_bits:
             self.D = D
         else:
-            self.D = min(D, 2.0 ** (32 - 1 - (self.precision)))
+            self.D = min(D, 2.0**(32-1-(self.precision)))
 
     def get_output_eps(self, eps_in: Tensor) -> Tensor:
         r"""Get the output quantum (:math:`\varepsilon`) given the input one.
@@ -197,7 +179,7 @@ class PACTActivationQuantizer(torch.nn.Module):
         :rtype:  :py:class:`torch.Tensor`
         """
 
-        return self.alpha / (2.0 ** (self.precision) - 1)
+        return self.alpha/(2.0**(self.precision)-1)
 
     def reset_alpha(self, use_max: bool = True, nb_std: float = 5.0) -> None:
         r"""Reset the value of :math:`\alpha`. If `use_max` is `True`, then the highest tensor-wise value collected
@@ -223,33 +205,16 @@ class PACTActivationQuantizer(torch.nn.Module):
         return self.max.item(), self.running_mean.item(), self.running_var.item()
 
     def set_quant_ratio(self, quant_ratio=None):
-        if quant_ratio is None:
+        if(quant_ratio is None):
             # get recommended value
-            quant_ratio = [
-                None,
-                0.2,
-                0.3,
-                0.4,
-                0.5,
-                0.55,
-                0.6,
-                0.7,
-                0.8,
-                0.83,
-                0.86,
-                0.89,
-                0.92,
-                0.95,
-                0.98,
-                0.99,
-                1,
-            ][min(self.precision, 16)]
+            quant_ratio = [None, 0.2, 0.3, 0.4, 0.5, 0.55, 0.6, 0.7, 0.8, 0.83,
+                           0.86, 0.89, 0.92, 0.95, 0.98, 0.99, 1][min(self.precision, 16)]
         assert 0 <= quant_ratio <= 1, logger.error(
-            f"Wrong quant ratio. Must in [0, 1], but got {quant_ratio}"
-        )
+            f"Wrong quant ratio. Must in [0,1], but got {quant_ratio}")
         self.quant_ratio = quant_ratio
 
     def register_hook(self):
+
         def quantize_hook(module, x, y):
             r"""Forward-prop function for PACT-quantized activations.
 
@@ -270,53 +235,42 @@ class PACTActivationQuantizer(torch.nn.Module):
                 with torch.no_grad():
                     self.max[:] = max(self.max.item(), y.max())
                     self.min[:] = min(self.min.item(), y.min())
-                    self.running_mean[:] = (
-                        0.9 * self.running_mean.item() + 0.1 * y.mean()
-                    )
-                    self.running_var[:] = (
-                        0.9 * self.running_var.item() + 0.1 * y.std() * y.std()
-                    )
+                    self.running_mean[:] = 0.9 * \
+                        self.running_mean.item() + 0.1 * y.mean()
+                    self.running_var[:] = 0.9 * \
+                        self.running_var.item() + 0.1 * y.std()*y.std()
                 return y
             else:
                 # QuantNoise ICLR 2021
-                if self.quant_ratio < 1 and module.training:
+                if(self.quant_ratio < 1 and module.training):
                     # implementation from fairseq
                     # must fully quantize during inference
-                    quant_noise_mask = torch.empty_like(y, dtype=torch.bool).bernoulli_(
-                        1 - self.quant_ratio
-                    )
+                    quant_noise_mask = torch.empty_like(
+                        y, dtype=torch.bool).bernoulli_(1-self.quant_ratio)
                 else:
                     quant_noise_mask = None
                 if self.level is not None:
                     level = self.level
                 else:
-                    level = 2**self.precision
+                    level = 2 ** self.precision
                 # eps = self.alpha/(2.0**(self.precision)-1)
-                return pact_quantize(
-                    y,
-                    level,
-                    self.alpha,
-                    quant_noise_mask,
-                    self.lower_bound,
-                    self.upper_bound,
-                )
+                return pact_quantize(y, level, self.alpha, quant_noise_mask,
+                                     self.lower_bound, self.upper_bound)
 
         # register hook
         self.handle = self.module.register_forward_hook(quantize_hook)
         return self.handle
 
     def remove_hook(self) -> None:
-        # remove the forward hook
-        if self.handle is not None:
+        ## remove the forward hook
+        if(self.handle is not None):
             self.handle.remove()
 
 
 if __name__ == "__main__":
     import pdb
-
     pdb.set_trace()
     device = torch.device("cuda")
-
     class Model(torch.nn.Module):
         def __init__(self) -> None:
             super().__init__()
@@ -324,16 +278,15 @@ if __name__ == "__main__":
         def forward(self, x):
             y = x + 0.3
             return y
-
     model = Model().to(device)
     model.train()
-    quantizer = PACTActivationQuantizer(
-        module=model, precision=4, quant_ratio=0.1, device=device, backprop_alpha=False
-    )
+    quantizer = PACTActivationQuantizer(module=model, precision=4,
+                                        quant_ratio=0.1, device=device,
+                                        backprop_alpha=False)
     quantizer.set_quant_ratio(0.8)
     torch.manual_seed(10)
     torch.cuda.manual_seed_all(10)
-    x = torch.randn(4, 4, device=device, requires_grad=True)
+    x = torch.randn(4,4, device=device, requires_grad=True)
     y = model(x)
     loss = y.sum()
     loss.backward()
@@ -341,3 +294,5 @@ if __name__ == "__main__":
     print(y)
     print(quantizer.alpha.data)
     print(quantizer.alpha.grad)
+
+    

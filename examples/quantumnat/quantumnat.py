@@ -32,6 +32,7 @@ import torchquantum.functional as tqf
 from torchquantum.dataset import MNIST
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torchquantum.plugin import (
+    tq2qiskit_expand_params,
     tq2qiskit,
     qiskit2tq,
     tq2qiskit_measurement,
@@ -40,9 +41,12 @@ from torchquantum.plugin import (
     op_history2qiskit_expand_params,
 )
 from torchquantum.util import (
+    build_module_from_op_list,
+    build_module_op_list,
     get_v_c_reg_mapping,
     get_p_c_reg_mapping,
     get_p_v_reg_mapping,
+    get_cared_configs,
 )
 
 from torchquantum.plugin import QiskitProcessor
@@ -58,9 +62,7 @@ class QFCModel(tq.QuantumModule):
         def __init__(self):
             super().__init__()
             self.n_wires = 4
-            self.random_layer = tq.RandomLayer(
-                n_ops=50, wires=list(range(self.n_wires))
-            )
+            self.random_layer = tq.RandomLayer(n_ops=50, wires=list(range(self.n_wires)))
             # self.arch = {'n_wires': self.n_wires, 'n_blocks': 4, 'n_layers_per_block': 2}
             # self.random_layer = tq.layers.U3CU3Layer0(self.arch)
 
@@ -90,13 +92,9 @@ class QFCModel(tq.QuantumModule):
             self.crx0(qdev, wires=[0, 2])
 
             # add some more non-parameterized gates (add on-the-fly)
-            tqf.hadamard(
-                qdev, wires=3, static=self.static_mode, parent_graph=self.graph
-            )
+            tqf.hadamard(qdev, wires=3, static=self.static_mode, parent_graph=self.graph)
             tqf.sx(qdev, wires=2, static=self.static_mode, parent_graph=self.graph)
-            tqf.cnot(
-                qdev, wires=[3, 0], static=self.static_mode, parent_graph=self.graph
-            )
+            tqf.cnot(qdev, wires=[3, 0], static=self.static_mode, parent_graph=self.graph)
 
     def __init__(self):
         super().__init__()
@@ -108,9 +106,7 @@ class QFCModel(tq.QuantumModule):
         self.norm = torch.nn.BatchNorm1d(self.n_wires)
 
     def forward(self, x, use_qiskit=False):
-        qdev = tq.QuantumDevice(
-            n_wires=self.n_wires, bsz=x.shape[0], device=x.device, record_op=True
-        )
+        qdev = tq.QuantumDevice(n_wires=self.n_wires, bsz=x.shape[0], device=x.device, record_op=True)
         bsz = x.shape[0]
         x = F.avg_pool2d(x, 6).view(bsz, 16)
         devi = x.device
@@ -119,24 +115,20 @@ class QFCModel(tq.QuantumModule):
             self.encoder(qdev, x)
             op_history_parameterized = qdev.op_history
             qdev.reset_op_history()
-            encoder_circ = op_history2qiskit_expand_params(
-                self.n_wires, op_history_parameterized, bsz=bsz
-            )
+            encoder_circ = op_history2qiskit_expand_params(self.n_wires, op_history_parameterized, bsz=bsz)
             self.q_layer(qdev)
             op_history_fixed = qdev.op_history
             qdev.reset_op_history()
             q_layer_circ = op_history2qiskit(self.n_wires, op_history_fixed)
             measurement_circ = tq2qiskit_measurement(qdev, self.measure)
 
-            assembed_circs = qiskit_assemble_circs(
-                encoder_circ, q_layer_circ, measurement_circ
-            )
+            assembed_circs = qiskit_assemble_circs(encoder_circ, q_layer_circ, measurement_circ)
             x = self.qiskit_processor.process_ready_circs(qdev, assembed_circs).to(devi)
         else:
             self.encoder(qdev, x)
             self.q_layer(qdev)
             x = self.measure(qdev)
-
+        
         # simplified version of post-measurement normalization, implemented with batch norm
         x = self.norm(x)
 
@@ -241,7 +233,6 @@ def main():
     n_epochs = args.epochs
 
     from qiskit import IBMQ
-
     IBMQ.load_account()
 
     qdev = tq.QuantumDevice(n_wires=model.n_wires)
@@ -256,13 +247,13 @@ def main():
 
     circ_transpiled = processor.transpile(circs=circ)
     # circ_transpiled.draw(output='mpl', filename='after-transpile.png')
-
+    
     q_layer = qiskit2tq(circ=circ_transpiled)
 
     model.measure.set_v_c_reg_mapping(get_v_c_reg_mapping(circ_transpiled))
     model.q_layer = q_layer
 
-    # noise inject, initialized this noise model which will inject noise to gates
+    # noise inject, initilized this noise model which will inject noise to gates
     noise_model_tq = tq.NoiseModelTQ(
         noise_model_name="ibmq_quito",
         n_epochs=n_epochs,
@@ -284,18 +275,18 @@ def main():
     # post-training quantization quantizer, in this model, there is only one node, meaning the output of the quantum layer is not encoded
     # again in the later quantum layer. post-training quantization is more effective for multi-node models.
     quantizer = PACTActivationQuantizer(
-        module=model,
-        precision=4,
-        alpha=1.0,
-        backprop_alpha=False,
-        device=device,
-        lower_bound=-5,
-        upper_bound=5,
+                module=model,
+                precision=4,
+                alpha=1.0,
+                backprop_alpha=False,
+                device=device,
+                lower_bound=-5,
+                upper_bound=5,
     )
 
     for epoch in range(1, n_epochs + 1):
         # train
-        print(f"Epoch {epoch}: ")
+        print(f"Epoch {epoch}:")
         quantizer.register_hook()
         train(dataflow, model, device, optimizer)
         print(optimizer.param_groups[0]["lr"])
@@ -304,7 +295,7 @@ def main():
         valid_test(dataflow, "valid", model, device)
         scheduler.step()
         quantizer.remove_hook()
-
+    
     print(noise_model_tq.noise_counter)
 
     # test

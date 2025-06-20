@@ -23,6 +23,7 @@ SOFTWARE.
 """
 
 import torch
+import torchquantum as tq
 import numpy as np
 
 from typing import Any
